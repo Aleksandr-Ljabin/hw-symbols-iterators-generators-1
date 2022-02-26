@@ -1,6 +1,8 @@
 class Team {
   constructor() {
     this.members = new Set();
+    this.ind = 0;
+    this.to = this.members.size;
   }
 
   add(character) {
@@ -11,18 +13,29 @@ class Team {
     }
   };
 
-  // addAll(...characterInput) {
-  //   characterInput.forEach((character) => this.members.add(character));
-  // };
+  addAll(...characterInput) {
+    characterInput.forEach((character) => this.members.add(character));
+  };
 
-  // toArray() {
-  //   return Array.from(this.members);
-  // }
+  toArray() {
+    return Array.from(this.members);
+  }
 
   iteratorMembers() {
 
-    return this.members[Symbol.iterator]();
-
+    this.members[Symbol.iterator] = function () {
+      return {
+        next() {
+          if (this.ind < this.to) {
+            return { value: this.members[this.ind++], done: false };
+          }
+          return { done: true };
+        }
+      }
+    };
+    for (let item of this.members) {
+      console.log(item);
+    }
   }
 
 
